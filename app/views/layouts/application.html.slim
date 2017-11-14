@@ -1,0 +1,16 @@
+doctype html
+
+html
+  head
+    title LavaWork
+
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: :all
+    = csrf_meta_tags
+    = javascript_include_tag 'application'
+  body
+    .container
+      = yield
+
+    = content_for :assets
+    = toastr_flash

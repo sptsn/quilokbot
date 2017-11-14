@@ -1,0 +1,26 @@
+doctype html
+
+html
+  head
+    title Test App Admin
+
+    = csrf_meta_tags
+    = stylesheet_link_tag 'application', media: :all
+    = csrf_meta_tags
+    = javascript_include_tag 'application'
+  body
+    .navbar.navbar-default.navbar-static-top
+      .container
+        .navbar-header
+          = link_to fa_icon('home'), root_path, class: "navbar-brand"
+          = link_to fa_icon('dashboard'), admin_path, class: "navbar-brand"
+
+          ul.nav.navbar-nav.navbar-right
+            li
+              = link_to fa_icon('sign-out', text: 'Sign out'), sign_out_path, method: :delete
+
+    .container
+      = yield
+
+    = content_for :assets
+    = toastr_flash
