@@ -1,0 +1,6 @@
+.row
+  .col-md-6
+    .page-header
+      h1 Edit Resident
+
+    = render partial: 'admin/residents/shared/form', locals: { resident: resource_resident, url: admin_resident_path(resource_resident), submit_text: 'Update' }

@@ -1,0 +1,6 @@
+.row
+  .col-md-6
+    .page-header
+      h1 New Resident
+
+    = render partial: 'admin/residents/shared/form', locals: { resident: resource_resident, url: admin_residents_path, submit_text: 'Create' }

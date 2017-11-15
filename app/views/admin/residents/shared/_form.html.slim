@@ -1,0 +1,8 @@
+= simple_form_for resident, as: :resident, url: url, html: { class: 'login__form' } do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.input :phone
+  = f.input :days
+
+  => f.button :submit, submit_text, class: 'btn btn-primary'
+  = link_to 'Cancel', admin_url, class: 'btn btn-default'
