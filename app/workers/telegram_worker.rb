@@ -12,6 +12,7 @@ class TelegramBot
         @message = message
         @bot = bot
         @resident = init_resident
+        @resident.update_attribute(:telegram_id, message.from.id) if @resident.telegram_id.nil?
 
         puts "#{message.from.username} => #{message.text}"
 
