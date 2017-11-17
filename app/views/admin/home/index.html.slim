@@ -11,6 +11,8 @@
         th Last name
         th Phone
         th Days
+        th Telegram ID
+        th Active
         th.text-right
     tbody
       - residents_collection.each do |resident|
@@ -19,6 +21,8 @@
           td = resident.last_name
           td = resident.phone
           td = resident.days
+          td = resident.telegram_id
+          td = resident.active
           td.text-right
             => link_to fa_icon('pencil'), edit_admin_resident_path(resident), class: 'btn btn-sm btn-primary'
             => link_to fa_icon('trash'), admin_resident_path(resident), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'

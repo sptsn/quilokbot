@@ -3,6 +3,8 @@
   = f.input :last_name
   = f.input :phone
   = f.input :days
+  = f.input :telegram_id, label: 'Telegram ID'
+  = f.input :active
 
   => f.button :submit, submit_text, class: 'btn btn-primary'
   = link_to 'Cancel', admin_url, class: 'btn btn-default'

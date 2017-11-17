@@ -8,7 +8,7 @@ class Admin::HomeController < Admin::BaseController
   protected
 
   def residents_collection
-    @residents_collection ||= Resident.all
+    @residents_collection ||= Resident.order(:id)
   end
 
 end
