@@ -12,6 +12,7 @@
         th Phone
         th Days
         th Telegram ID
+        th Telegram Username
         th Active
         th.text-right
     tbody
@@ -22,6 +23,7 @@
           td = resident.phone
           td = resident.days
           td = resident.telegram_id
+          td = resident.telegram_username
           td = resident.active
           td.text-right
             => link_to fa_icon('pencil'), edit_admin_resident_path(resident), class: 'btn btn-sm btn-primary'
