@@ -14,6 +14,8 @@ html
         .navbar-header
           = link_to fa_icon('home'), root_path, class: "navbar-brand"
           = link_to fa_icon('dashboard'), admin_path, class: "navbar-brand"
+          = link_to 'Residents', admin_residents_path, class: "navbar-brand"
+          = link_to 'Telegram messages', admin_messages_path, class: "navbar-brand"
 
           ul.nav.navbar-nav.navbar-right
             li

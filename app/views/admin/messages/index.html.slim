@@ -1,0 +1,9 @@
+.page-header
+  h1 Send Telegram Message
+
+.col-md-6
+  = simple_form_for :message, as: :message, url: admin_send_message_path, html: { class: 'login__form' } do |f|
+    = f.input :chat_id, collection: residents_collection, include_blank: false, label: 'Resident'
+    = f.input :text, as: :text
+
+    => f.button :submit, 'Send', class: 'btn btn-primary'

@@ -1,0 +1,33 @@
+.page-header
+  .pull-right
+    = link_to 'New Resident', new_admin_resident_path, class: 'btn btn-primary'
+  h1 Residents
+
+- if residents_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th First name
+        th Last name
+        th Phone
+        th Days
+        th Telegram ID
+        th Telegram Username
+        th Active
+        th.text-right
+    tbody
+      - residents_collection.each do |resident|
+        tr
+          td = resident.first_name
+          td = resident.last_name
+          td = resident.phone
+          td = resident.days
+          td = resident.telegram_id
+          td = resident.telegram_username
+          td = resident.display_active
+          td.text-right
+            => link_to fa_icon('pencil'), edit_admin_resident_path(resident), class: 'btn btn-sm btn-primary'
+            => link_to fa_icon('trash'), admin_resident_path(resident), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
+- else
+  center
+    h3.text-muted No residents found.

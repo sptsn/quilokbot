@@ -1,6 +1,9 @@
 class Admin::ResidentsController < Admin::BaseController
 
-  helper_method :resource_resident
+  helper_method :resource_resident, :residents_collection
+
+  def index
+  end
 
   def new
   end
@@ -32,6 +35,10 @@ class Admin::ResidentsController < Admin::BaseController
   end
 
   protected
+
+  def residents_collection
+    @residents_collection ||= Resident.order(:id).decorate
+  end
 
   def resource_resident
     @resource_resident ||= params[:id].present? ? Resident.find(params[:id]) : Resident.new(resident_params)
