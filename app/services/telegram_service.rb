@@ -2,7 +2,7 @@ class TelegramService
 
   def initialize
     @base_url = 'https://api.telegram.org/'
-    @token = 'bot464755633:AAEaMe6xAtQm6-_b3f6TVouIBCZ4oMlToVU'
+    @token = 'bot508393177:AAGG3cuRIIb1OHfRq1IuvE1QxtlIAp1Djas'
   end
 
   def send_message(args)

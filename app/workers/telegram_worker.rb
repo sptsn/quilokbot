@@ -3,7 +3,7 @@ require 'telegram/bot'
 class TelegramBot
 
   def initialize
-    @token = '464755633:AAEaMe6xAtQm6-_b3f6TVouIBCZ4oMlToVU' # lavawork_bot
+    @token = '508393177:AAGG3cuRIIb1OHfRq1IuvE1QxtlIAp1Djas' # lavaworkbot
   end
 
   def call
@@ -12,7 +12,7 @@ class TelegramBot
         @message = message
         @bot = bot
         @resident = init_resident
-        @resident.update_attribute(:telegram_id, message.from.id) if @resident.telegram_id.nil?
+        @resident.update_attribute(:telegram_id, message.from.id) if @resident.present? && @resident.telegram_id.nil?
 
         puts "#{message.from.username} => #{message.text}"
 
@@ -25,7 +25,7 @@ class TelegramBot
         when '/days'
           process_days
         else
-          send_message("У тебя все получится, детка, ебашь!")
+          send_message(["У тебя все получится, детка, ебашь!", "Короче расслабься", "К тебе или ко мне?", "Ну шо епта", "Коворкинг - это образ жизни", "Просто напиши ей/ему", "Держи вкурсе", "Ave Maria - Deus Vult", "Ой, да займись ты уже делом", "я бот, а ты урод", "продолжай", "ладно, поигрались и хватит. Надоел уже!"].sample)
         end
       end
     end

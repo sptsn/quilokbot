@@ -7,6 +7,7 @@ class Resident < ActiveRecord::Base
   validates :telegram_id, uniqueness: true, allow_nil: true, allow_blank: true
 
   scope :active, -> { where(active: true) }
+  scope :active_first, -> { order("CASE active WHEN true THEN 1 ELSE 2 END") }
 
   before_validation do
     self.telegram_id = nil if self.telegram_id.blank?
