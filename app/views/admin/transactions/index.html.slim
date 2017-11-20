@@ -1,0 +1,21 @@
+.page-header
+  h1 Transactions
+
+- if transactions_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th From
+        th To
+        th Days
+        th Created at
+    tbody
+      - transactions_collection.each do |transaction|
+        tr
+          td = transaction.sender.display_name
+          td = transaction.receiver.display_name
+          td = transaction.days
+          td = transaction.display_created_at
+- else
+  center
+    h3.text-muted No transactions found.

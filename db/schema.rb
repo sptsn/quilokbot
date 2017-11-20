@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117185054) do
+ActiveRecord::Schema.define(version: 20171120210921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,12 +20,20 @@ ActiveRecord::Schema.define(version: 20171117185054) do
     t.string   "first_name",                       null: false
     t.string   "last_name",                        null: false
     t.string   "phone",                            null: false
-    t.integer  "days",              default: 0,    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "telegram_id"
     t.boolean  "active",            default: true, null: false
     t.string   "telegram_username"
+    t.date     "expire_at"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "receiver_id", null: false
+    t.integer  "sender_id",   null: false
+    t.integer  "days",        null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: :cascade do |t|

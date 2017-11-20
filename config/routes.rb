@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :residents
     get 'messages' => 'messages#index'
     post 'messages/send' => 'messages#send_message', as: 'send_message'
+    resources :transactions, only: :index
   end
 
 end

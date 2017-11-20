@@ -11,7 +11,7 @@ class Admin::ResidentsController < Admin::BaseController
   def create
     if resource_resident.save
       flash[:success] = 'Resident created'
-      redirect_to admin_path
+      redirect_to admin_residents_path
     else
       render action: :new
     end
@@ -23,7 +23,7 @@ class Admin::ResidentsController < Admin::BaseController
   def update
     if resource_resident.update_attributes(resident_params)
       flash[:success] = 'Resident updated'
-      redirect_to admin_path
+      redirect_to admin_residents_path
     else
       render action: :edit
     end

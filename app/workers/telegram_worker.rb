@@ -24,6 +24,8 @@ class TelegramBot
         #   process_phone
         when '/days'
           process_days
+        when /\/send/
+          process_send
         else
           send_message(["У тебя все получится, детка, ебашь!", "Короче расслабься", "К тебе или ко мне?", "Ну шо епта", "Коворкинг - это образ жизни", "Просто напиши ей/ему", "Держи вкурсе", "Ave Maria - Deus Vult", "Ой, да займись ты уже делом", "я бот, а ты урод", "продолжай", "ладно, поигрались и хватит. Надоел уже!"].sample)
         end
@@ -32,6 +34,20 @@ class TelegramBot
   end
 
   protected
+
+  def process_send
+    # /send @quilok 3
+    send_message("Ваш аккаунт не найден") unless @resident.present?
+    cmd, receiver, days = @message.text.split(' ')
+    days = days.try(:to_i)
+    unless receiver.is_a?(String) && days.is_a?(Fixnum) && days > 0
+      send_message("Правильный формат '/send <Telegram получателя> <дни>'")
+      return
+    end
+
+    answer = TransferDaysService.call(@resident, receiver, days)
+    send_message(answer)
+  end
 
   def process_days
     if @resident.present?
