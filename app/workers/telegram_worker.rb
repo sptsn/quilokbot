@@ -2,8 +2,23 @@ require 'telegram/bot'
 
 class TelegramBot
 
+  # days - узнать количество дней коворкинга
+  # residents - список резидентов
+  # send - отправить дни другому резиденту
+
   def initialize
     @token = '508393177:AAGG3cuRIIb1OHfRq1IuvE1QxtlIAp1Djas' # lavaworkbot
+    @commands = %w(
+      start
+      days
+      send
+      residents
+      cancel
+    )
+    @send_sub_commands = %w(
+      wait_for_days
+      wait_for_reveiver
+    )
   end
 
   def call
@@ -12,22 +27,19 @@ class TelegramBot
         @message = message
         @bot = bot
         @resident = init_resident
-        @resident.update_attribute(:telegram_id, message.from.id) if @resident.present? && @resident.telegram_id.nil?
+        @resident.update_attribute(:telegram_id, message.from.id) if @resident.telegram_id&.nil?
 
         puts "#{message.from.username} => #{message.text}"
 
-        case message.text
-        when '/start'
-          process_start
-        # when  /\/phone/
-        #   @resident = Resident.find_by(phone: message.text.split(' ').last) # FIXME небезопасно
-        #   process_phone
-        when '/days'
-          process_days
-        when /\/send/
-          process_send
+        if !message.text.in?(['/cancel', '/residents']) && @resident.telegram_id.in?($redis.keys)
+          send "process_#{redis_value['state']}"
         else
-          send_message(["У тебя все получится, детка, ебашь!", "Короче расслабься", "К тебе или ко мне?", "Ну шо епта", "Коворкинг - это образ жизни", "Просто напиши ей/ему", "Держи вкурсе", "Ave Maria - Deus Vult", "Ой, да займись ты уже делом", "я бот, а ты урод", "продолжай", "ладно, поигрались и хватит. Надоел уже!"].sample)
+          cmd = message.text.split('/').second
+          if cmd.in? @commands
+            send "process_#{cmd}"
+          else
+            process_random_message
+          end
         end
       end
     end
@@ -35,18 +47,59 @@ class TelegramBot
 
   protected
 
-  def process_send
-    # /send @quilok 3
-    send_message("Ваш аккаунт не найден") unless @resident.present?
-    cmd, receiver, days = @message.text.split(' ')
-    days = days.try(:to_i)
-    unless receiver.is_a?(String) && days.is_a?(Fixnum) && days > 0
-      send_message("Правильный формат '/send <Telegram получателя> <дни>'")
-      return
+  def process_wait_for_days
+    days = @message.text.to_i
+    if days <= 0
+      send_message 'Неверное значение'
+      set_redis state: 'wait_for_days', receiver: redis_value['receiver']
+    elsif @resident.days < days
+      send_message 'У вас не хватает дней'
+      set_redis state: 'wait_for_days', receiver: redis_value['receiver']
+    else
+      send_message TransferDaysService.call(@resident, Resident.find_by(telegram_username: redis_value['receiver']), days)
+      reset_redis
     end
+  end
 
-    answer = TransferDaysService.call(@resident, receiver, days)
-    send_message(answer)
+  def process_wait_for_reveiver
+    receiver = Resident.find_by(telegram_username: @message.text)
+    if receiver.present?
+      set_redis state: 'wait_for_days', receiver: @message.text
+      send_message 'Укажите количество дней'
+    else
+      set_redis state: 'wait_for_reveiver'
+      send_message 'Получатель не найден. Просмотрите список резидентов командой /residents или введите /cancel для отмены.'
+    end
+  end
+
+  def set_redis(value)
+    $redis.set @resident.telegram_id, value.to_json
+  end
+
+  def reset_redis
+    $redis.del @resident.telegram_id
+  end
+
+  def redis_value
+    JSON.parse $redis[@resident.telegram_id]
+  end
+
+  def process_cancel
+    reset_redis
+    send_message "OK"
+  end
+
+  def process_random_message
+    send_message(["У тебя все получится, детка, ебашь!", "Короче расслабься", "К тебе или ко мне?", "Ну шо епта", "Коворкинг - это образ жизни", "Просто напиши ей/ему", "Держи вкурсе", "Ave Maria - Deus Vult", "Ой, да займись ты уже делом", "я бот, а ты урод", "продолжай", "ладно, поигрались и хватит. Надоел уже!"].sample)
+  end
+
+  def process_residents
+    send_message Resident.all.decorate.reduce(""){|memo, r| memo << r.display_name_with_telegram_username << "\n"}
+  end
+
+  def process_send
+    set_redis state: 'wait_for_reveiver'
+    send_message("Укажите получателя")
   end
 
   def process_days

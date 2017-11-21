@@ -1,11 +1,6 @@
 class TransferDaysService
 
-  def self.call(sender, receiver_username, days)
-    receiver = Resident.find_by(telegram_username: receiver_username)
-
-    return 'У вас не хватает дней' if sender.days < days
-    return 'Получатель не найден' if receiver.nil?
-
+  def self.call(sender, receiver, days)
     ActiveRecord::Base.transaction do
       sender.decrement_days! days
       receiver.increment_days! days
