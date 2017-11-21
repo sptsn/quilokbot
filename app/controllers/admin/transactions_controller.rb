@@ -8,7 +8,7 @@ class Admin::TransactionsController < Admin::BaseController
   protected
 
   def transactions_collection
-    @transactions_collection ||= Transaction.order(created_at: :desc).decorate
+    @transactions_collection ||= Transaction.ordered.page(params[:page]).decorate
   end
 
 end

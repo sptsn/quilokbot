@@ -7,4 +7,6 @@ class Transaction < ActiveRecord::Base
   validates :receiver, presence: true
   validates :days, presence: true
 
+  scope :ordered, -> { order(created_at: :desc) }
+
 end

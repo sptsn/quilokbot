@@ -1,4 +1,4 @@
-class TransactionDecorator < Draper::Decorator
+class TransactionDecorator < BaseDecorator
 
   delegate_all
 

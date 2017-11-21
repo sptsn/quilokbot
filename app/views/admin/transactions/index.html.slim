@@ -16,6 +16,8 @@
           td = transaction.receiver.display_name
           td = transaction.days
           td = transaction.display_created_at
+  center
+    = paginate transactions_collection
 - else
   center
     h3.text-muted No transactions found.

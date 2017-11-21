@@ -1,4 +1,4 @@
-class ResidentDecorator < Draper::Decorator
+class ResidentDecorator < BaseDecorator
 
   delegate_all
 
@@ -10,7 +10,7 @@ class ResidentDecorator < Draper::Decorator
   end
 
   def display_active
-    source.active? ? '✓' : "<em class='text-muted'>–</em>".html_safe
+    source.active? ? '✓' : display_empty_space
   end
 
   def display_expire_at
