@@ -10,8 +10,7 @@ class TransferDaysService
         days: days
       )
     end
-
-    "Перечислено #{days} дней пользователю #{receiver.decorate.display_name}"
+    true
   end
 
 end
