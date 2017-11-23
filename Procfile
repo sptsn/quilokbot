@@ -1,2 +1,1 @@
-web: bundle exec rails s
-web: sidekiq
+bot: sidekiq
