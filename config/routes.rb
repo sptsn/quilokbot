@@ -13,6 +13,6 @@ Rails.application.routes.draw do
     resources :transactions, only: :index
   end
 
-  get "telegram/#{$token}" => 'telegram#message'
+  post "telegram/#{$token}" => 'telegram#message'
 
 end
