@@ -7,7 +7,7 @@ module Telegram::ProcessMessages
   end
 
   def process_send
-    set_redis state: 'wait_for_reveiver'
+    set_redis state: 'wait_for_receiver'
     "Укажите получателя"
   end
 
@@ -39,7 +39,7 @@ module Telegram::ProcessMessages
   end
 
   def process_wait_for_days
-    days = @message.text.to_i
+    days = @message.to_i
     if days <= 0
       set_redis state: 'wait_for_days', receiver: redis_value['receiver']
       'Неверное значение'
@@ -54,13 +54,13 @@ module Telegram::ProcessMessages
     end
   end
 
-  def process_wait_for_reveiver
-    receiver = Resident.find_by(telegram_username: @message.text)
+  def process_wait_for_receiver
+    receiver = Resident.find_by(telegram_username: @message)
     if receiver.present?
-      set_redis state: 'wait_for_days', receiver: @message.text
+      set_redis state: 'wait_for_days', receiver: @message
       'Укажите количество дней'
     else
-      set_redis state: 'wait_for_reveiver'
+      set_redis state: 'wait_for_receiver'
       'Получатель не найден. Просмотрите список резидентов командой /residents или введите /cancel для отмены.'
     end
   end

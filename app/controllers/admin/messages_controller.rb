@@ -6,7 +6,7 @@ class Admin::MessagesController < Admin::BaseController
   end
 
   def send_message
-    res = TelegramService.new.send_message(text: message_params[:text], chat_id: message_params[:chat_id])
+    res = Telegram::SendMessageService.new.call(text: message_params[:text], chat_id: message_params[:chat_id])
 
     if res.status == 200
       flash[:success] = 'Message sent'

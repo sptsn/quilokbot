@@ -1,1 +1,0 @@
-# TelegramWorker.perform_async

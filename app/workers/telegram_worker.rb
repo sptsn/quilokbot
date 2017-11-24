@@ -3,7 +3,7 @@ class TelegramWorker
 
   def perform
     puts 'telegram worker!'
-    TelegramBot.new.call
+    Telegram::BotService.new.call
   end
 
 end
