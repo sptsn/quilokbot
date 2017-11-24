@@ -130,6 +130,7 @@ GEM
       activerecord (>= 4.0, < 5.2)
       request_store (~> 1.1)
     pg (0.19.0)
+    puma (3.10.0)
     rack (1.6.8)
     rack-protection (1.5.3)
       rack
@@ -259,6 +260,7 @@ DEPENDENCIES
   letter_opener
   paper_trail
   pg
+  puma
   rails (= 4.2.5)
   rails-assets-bootstrap-sass!
   rails-assets-toastr!
