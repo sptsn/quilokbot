@@ -8,7 +8,7 @@ module Telegram::ProcessMessages
 
   def process_send
     set_redis state: 'wait_for_receiver'
-    "Укажите получателя"
+    "Укажите telegram-логин получателя"
   end
 
   def process_days
