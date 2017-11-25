@@ -58,7 +58,7 @@ module Telegram::ProcessMessages
     receiver = Resident.find_by(telegram_username: @message)
 
     if receiver.present?
-      if receiver != resident
+      if receiver != @resident
         set_redis state: 'wait_for_days', receiver: @message
         'Укажите количество дней'
       else
