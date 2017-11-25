@@ -56,9 +56,15 @@ module Telegram::ProcessMessages
 
   def process_wait_for_receiver
     receiver = Resident.find_by(telegram_username: @message)
+
     if receiver.present?
-      set_redis state: 'wait_for_days', receiver: @message
-      'Укажите количество дней'
+      if receiver != resident
+        set_redis state: 'wait_for_days', receiver: @message
+        'Укажите количество дней'
+      else
+        set_redis state: 'wait_for_receiver'
+        'Нельзя переводить дни самому себе'
+      end
     else
       set_redis state: 'wait_for_receiver'
       'Получатель не найден. Просмотрите список резидентов командой /residents или введите /cancel для отмены.'
