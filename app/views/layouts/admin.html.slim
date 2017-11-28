@@ -8,6 +8,7 @@ html
     = stylesheet_link_tag 'application', media: :all
     = csrf_meta_tags
     = javascript_include_tag 'application'
+    
   body
     .navbar.navbar-default.navbar-static-top
       .container
@@ -16,6 +17,7 @@ html
           = link_to fa_icon('dashboard'), admin_path, class: "navbar-brand"
           = link_to 'Residents', admin_residents_path, class: "navbar-brand"
           = link_to 'Telegram messages', admin_messages_path, class: "navbar-brand"
+          = link_to 'Telegram dispatch', admin_broadcast_path, class: "navbar-brand"
           = link_to 'Transactions', admin_transactions_path, class: "navbar-brand"
 
           ul.nav.navbar-nav.navbar-right
