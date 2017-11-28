@@ -1,17 +1,18 @@
 .page-header
   .pull-right
-    = link_to 'New Resident', new_admin_resident_path, class: 'btn btn-primary'
-  h1 Residents
+    = link_to t('residents.new'), new_admin_resident_path, class: 'btn btn-primary'
+  h1
+    = t('menu.residents')
 
 - if residents_collection.any?
   table.table.table-middled
     thead
       tr
-        th First name
-        th Last name
-        th Phone
-        th Days
-        th Expire at
+        th = t('residents.first_name')
+        th = t('residents.last_name')
+        th = t('residents.phone')
+        th = t('residents.days')
+        th = t('residents.expire_at')
         th Telegram ID
         th Telegram Username
         th Active

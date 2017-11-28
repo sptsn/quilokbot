@@ -21,6 +21,10 @@ class Resident < ActiveRecord::Base
     (self.expire_at - Date.today).to_i
   end
 
+  def days=(value)
+    self.expire_at = Date.today + value.days
+  end
+
   def increment_days!(count)
     self.expire_at += count.days
     save

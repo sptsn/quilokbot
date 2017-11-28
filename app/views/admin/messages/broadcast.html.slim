@@ -1,11 +1,12 @@
 .page-header
-  h1 Telegram Dispatch
+  h1
+    = t('menu.broadcast')
 
 .col-md-6
   .alert.alert-info
-    | This message will be sent to all residents
+    = t('broadcast.alert')
 
   = simple_form_for :message, as: :message, url: admin_send_broadcast_path, html: { class: 'login__form' } do |f|
-    = f.input :text, as: :text
+    = f.input :text, as: :text, label: t('message.text')
 
-    => f.button :submit, 'Send', class: 'btn btn-primary'
+    => f.button :submit, t('message.send'), class: 'btn btn-primary'

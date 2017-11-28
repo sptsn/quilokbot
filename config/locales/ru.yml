@@ -1,0 +1,30 @@
+ru:
+  transactions:
+    from: От кого
+    to: Кому
+    days: Дни
+    created_at: Дата
+  residents:
+    new: Новый резидент
+    edit: Редактировать резидента
+    first_name: Имя
+    last_name: Фамилия
+    phone: Телефон
+    days: Дни
+    expire_at: Активен до
+  message:
+    send: Отправить
+    text: Сообщение
+    receiver: Получатель
+  menu:
+    residents: Резиденты
+    transactions: Транзакции
+    send_message: Отправить сообщение
+    broadcast: Рассылка
+  broadcast:
+    alert: Это сообщение будет отправлено всем резидентам
+  sign_out: Выйти
+  sign_in: Войти
+  cancel: Отмена
+  create: Создать
+  update: Обновить

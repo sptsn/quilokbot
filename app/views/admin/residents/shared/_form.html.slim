@@ -1,11 +1,11 @@
 = simple_form_for resident, as: :resident, url: url, html: { class: 'login__form' } do |f|
-  = f.input :first_name
-  = f.input :last_name
-  = f.input :phone
-  = f.input :expire_at
+  = f.input :first_name, label: t('residents.first_name')
+  = f.input :last_name, label: t('residents.last_name')
+  = f.input :phone, label: t('residents.phone')
+  = f.input :days, label: t('residents.days')
   = f.input :telegram_id, label: 'Telegram ID'
-  = f.input :telegram_username
+  = f.input :telegram_username, label: 'Telegram Username'
   = f.input :active
 
   => f.button :submit, submit_text, class: 'btn btn-primary'
-  = link_to 'Cancel', admin_url, class: 'btn btn-default'
+  = link_to t('cancel'), admin_url, class: 'btn btn-default'
