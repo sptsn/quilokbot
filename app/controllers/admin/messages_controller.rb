@@ -9,16 +9,16 @@ class Admin::MessagesController < Admin::BaseController
   end
 
   def send_broadcast
-    res = []
-    Resident.where(telegram_username: 'aspitsyn').each do |resident|
-      r = send_message_service.call(text: message_params[:text], chat_id: resident.telegram_id)
-      res << [r.try(:status), r.try(:body)]
+    res = Resident.where(telegram_username: 'aspitsyn').map do |resident|
+      send_message_service.call(text: message_params[:text], chat_id: resident.telegram_id)
     end
-    if res.all?{|r| r.first == 200}
+
+    if res.all?{|r| r.status == 200}
       flash[:success] = 'Messages sent'
     else
       flash[:error] = 'Something goes wrong'
     end
+
     redirect_to admin_broadcast_path
   end
 

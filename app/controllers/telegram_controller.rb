@@ -2,7 +2,7 @@ class TelegramController < ApplicationController
 
   skip_before_action :verify_authenticity_token
 
-  def message
+  def recieve
     reciever = Resident.find_by(telegram_username: params[:message][:from][:username])
     reciever.update_attribute(:telegram_id, params[:message][:from][:id]) unless reciever.telegram_id
 

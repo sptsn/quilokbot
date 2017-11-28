@@ -8,5 +8,6 @@ class Transaction < ActiveRecord::Base
   validates :days, presence: true
 
   scope :ordered, -> { order(created_at: :desc) }
+  scope :for_last_month, -> { where("created_at > '#{(Date.today - 1.month).strftime('%m.%d.%Y')}'") }
 
 end

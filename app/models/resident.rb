@@ -17,7 +17,7 @@ class Resident < ActiveRecord::Base
   end
 
   def days
-    return 0 if self.expire_at.nil?
+    return 0 if self.expire_at.nil? || self.expire_at < Date.today
     (self.expire_at - Date.today).to_i
   end
 
