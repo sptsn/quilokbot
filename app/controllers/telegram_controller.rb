@@ -1,6 +1,6 @@
 class TelegramController < ApplicationController
 
-  skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, :require_user
 
   def recieve
     reciever = Resident.find_by(telegram_username: params[:message][:from][:username])

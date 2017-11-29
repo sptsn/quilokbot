@@ -6,7 +6,7 @@
   .alert.alert-info
     = t('broadcast.alert')
 
-  = simple_form_for :message, as: :message, url: admin_send_broadcast_path, html: { class: 'login__form' } do |f|
+  = simple_form_for :message, as: :message, url: send_broadcast_path, html: { class: 'login__form' } do |f|
     = f.input :text, as: :text, label: t('message.text')
 
     => f.button :submit, t('message.send'), class: 'btn btn-primary'

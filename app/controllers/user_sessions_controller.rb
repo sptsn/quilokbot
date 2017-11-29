@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
   def create
     if resource_session.save
       flash[:notice] = 'You signed in'
-      redirect_to admin_url
+      redirect_to root_url
     else
       render :action => :new
     end

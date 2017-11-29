@@ -6,7 +6,13 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   before_action :set_locale
+  before_filter :require_user
 
+  layout 'admin'
+
+  def require_user
+    redirect_to sign_in_url if current_user.nil?
+  end
 
   def current_user_session
     return @current_user_session if defined?(@current_user_session)

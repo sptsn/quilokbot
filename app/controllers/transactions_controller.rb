@@ -1,4 +1,4 @@
-class Admin::TransactionsController < Admin::BaseController
+class TransactionsController < ApplicationController
 
   helper_method :transactions_collection
 

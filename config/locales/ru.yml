@@ -1,4 +1,18 @@
 ru:
+  activerecord:
+    errors:
+      messages:
+        blank: поле должно быть заполнено
+  simple_form:
+    labels:
+      resident:
+        first_name: Имя
+        last_name: Фамилия
+        phone: Телефон
+        days: Дни
+        telegram_id: Telegram ID
+        telegram_username: Telegram Username
+
   transactions:
     from: От кого
     to: Кому

@@ -1,4 +1,4 @@
-class Admin::MessagesController < Admin::BaseController
+class MessagesController < ApplicationController
 
   helper_method :residents_collection
 
@@ -19,7 +19,7 @@ class Admin::MessagesController < Admin::BaseController
       flash[:error] = 'Something goes wrong'
     end
 
-    redirect_to admin_broadcast_path
+    redirect_to broadcast_path
   end
 
   def send_message
@@ -31,7 +31,7 @@ class Admin::MessagesController < Admin::BaseController
       flash[:error] = "#{JSON.parse(res.body)['error_code']} #{JSON.parse(res.body)['description']}"
     end
 
-    redirect_to admin_messages_path
+    redirect_to messages_path
   end
 
   protected

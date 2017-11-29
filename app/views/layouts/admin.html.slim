@@ -13,12 +13,11 @@ html
     .navbar.navbar-default.navbar-static-top
       .container
         .navbar-header
-          = link_to fa_icon('home'), root_path, class: "navbar-brand"
-          = link_to fa_icon('dashboard'), admin_path, class: "navbar-brand"
-          = link_to t('menu.residents'), admin_residents_path, class: "navbar-brand"
-          = link_to t('menu.send_message'), admin_messages_path, class: "navbar-brand"
-          = link_to t('menu.broadcast'), admin_broadcast_path, class: "navbar-brand"
-          = link_to t('menu.transactions'), admin_transactions_path, class: "navbar-brand"
+          = link_to fa_icon('dashboard'), root_path, class: "navbar-brand"
+          = link_to t('menu.residents'), residents_path, class: "navbar-brand"
+          = link_to t('menu.send_message'), messages_path, class: "navbar-brand"
+          = link_to t('menu.broadcast'), broadcast_path, class: "navbar-brand"
+          = link_to t('menu.transactions'), transactions_path, class: "navbar-brand"
 
           ul.nav.navbar-nav.navbar-right
             li
