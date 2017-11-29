@@ -9,7 +9,7 @@ class MessagesController < ApplicationController
   end
 
   def send_broadcast
-    res = Resident.where(telegram_username: 'aspitsyn').map do |resident|
+    res = Resident.all.map do |resident|
       send_message_service.call(text: message_params[:text], chat_id: resident.telegram_id)
     end
 
