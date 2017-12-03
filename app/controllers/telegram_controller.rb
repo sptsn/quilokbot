@@ -2,17 +2,18 @@ class TelegramController < Telegram::Bot::UpdatesController
   include Telegram::Bot::UpdatesController::MessageContext
 
   skip_before_action :verify_authenticity_token, :require_user
-  before_action :require_resident, :update_telegram_username
-
-  def update_telegram_username
-    unless sender&.telegram_username
-      sender.update_attribute(:telegram_username, from['username'])
-    end
-  end
+  before_action :require_resident, only: [:days, :residents, :send_days]
+  # before_action :update_telegram_username, except: :start
 
   def require_resident
     unless sender
       respond_with :message, text: 'Вы не являетесь резидентом коворкинга' and return false
+    end
+  end
+
+  def update_telegram_username
+    unless sender&.telegram_username
+      sender.update_attribute(:telegram_username, from['username'])
     end
   end
 
@@ -78,8 +79,38 @@ class TelegramController < Telegram::Bot::UpdatesController
   end
 
   def start(data = nil, *)
-    response = "Привет, #{sender.first_name}!"
-    respond_with :message, text: response
+     if sender.present?
+       respond_with :message, text: "Привет, #{sender.first_name}!"
+    else
+      save_context :wait_for_name
+      respond_with :message, text: "Привет, друг! Пришли свои имя и фамилию чтоб я мог тебя запомнить."
+    end
+  end
+
+  context_handler :wait_for_name do |*words|
+    session[:first_name] = words[0]
+    session[:last_name] = words[1]
+
+    save_context :wait_for_phone
+    respond_with :message, text: 'Теперь пришли номер телефона'
+  end
+
+  context_handler :wait_for_phone do |*words|
+    resident = Resident.new(
+      first_name: session[:first_name],
+      last_name: session[:last_name],
+      phone: words[0],
+      expire_at: Date.today + 1.day,
+      telegram_id: from['id'],
+      telegram_username: from['username']
+    )
+
+    if resident.save
+      respond_with :message, text: 'Ты успешно зарегистрировался, у тебя 1 день коворкинга'
+    else
+      save_context :wait_for_phone
+      respond_with :message, text: "Ошибка: #{resident.errors.full_messages.first}. Попробуй еще раз."
+    end
   end
 
   def residents
