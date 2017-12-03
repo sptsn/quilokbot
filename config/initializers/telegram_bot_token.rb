@@ -1,1 +1,0 @@
-$token = '508393177:AAGG3cuRIIb1OHfRq1IuvE1QxtlIAp1Djas'

@@ -10,10 +10,10 @@ class MessagesController < ApplicationController
 
   def send_broadcast
     res = Resident.all.map do |resident|
-      send_message_service.call(text: message_params[:text], chat_id: resident.telegram_id)
+      bot.send_message(text: message_params[:text], chat_id: resident.telegram_id)
     end
 
-    if res.all?{|r| r.status == 200}
+    if res.all?{|r| r['ok']}
       flash[:success] = 'Messages sent'
     else
       flash[:error] = 'Something goes wrong'
@@ -23,9 +23,9 @@ class MessagesController < ApplicationController
   end
 
   def send_message
-    res = send_message_service.call(text: message_params[:text], chat_id: message_params[:chat_id])
+    res = bot.send_message(text: message_params[:text], chat_id: message_params[:chat_id])
 
-    if res.status == 200
+    if res['ok']
       flash[:success] = 'Message sent'
     else
       flash[:error] = "#{JSON.parse(res.body)['error_code']} #{JSON.parse(res.body)['description']}"
@@ -35,6 +35,10 @@ class MessagesController < ApplicationController
   end
 
   protected
+
+  def bot
+    @bot ||= Telegram.bot
+  end
 
   def send_message_service
     @send_message_service ||= Telegram::SendMessageService.new

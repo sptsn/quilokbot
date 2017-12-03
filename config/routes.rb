@@ -14,5 +14,5 @@ Rails.application.routes.draw do
 
   resources :transactions, only: :index
 
-  post "telegram/#{$token}" => 'telegram#recieve'
+  telegram_webhooks TelegramController
 end
