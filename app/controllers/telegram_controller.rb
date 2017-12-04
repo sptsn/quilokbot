@@ -59,6 +59,8 @@ class TelegramController < Telegram::Bot::UpdatesController
 
   def cancel
     session[:receiver] = nil
+    session[:first_name] = nil
+    session[:last_name] = nil
     respond_with :message, text: 'OK'
   end
 
@@ -83,7 +85,7 @@ class TelegramController < Telegram::Bot::UpdatesController
        respond_with :message, text: "Привет, #{sender.first_name}!"
     else
       save_context :wait_for_name
-      respond_with :message, text: "Привет, друг! Пришли свои имя и фамилию чтоб я мог тебя запомнить."
+      respond_with :message, text: "Привет, друг! Пришли свои имя и фамилию чтоб я мог тебя запомнить или /cancel для отмены."
     end
   end
 
