@@ -81,8 +81,8 @@ class TelegramController < Telegram::Bot::UpdatesController
   end
 
   def start(data = nil, *)
-     if sender.present?
-       respond_with :message, text: "Привет, #{sender.first_name}!"
+    if sender.present?
+      respond_with :message, text: "Привет, #{sender.first_name}!"
     else
       save_context :wait_for_name
       respond_with :message, text: "Привет, друг! Пришли свои имя и фамилию чтоб я мог тебя запомнить или /cancel для отмены."
