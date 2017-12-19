@@ -1,0 +1,7 @@
+.row
+  .col-md-6
+    .page-header
+      h1
+        = t('users.new')
+
+    = render partial: 'users/shared/form', locals: { user: resource_user, url: users_path, submit_text: t('create') }

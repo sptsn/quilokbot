@@ -1,0 +1,28 @@
+.page-header
+  .pull-right
+    = link_to t('users.new'), new_user_path, class: 'btn btn-primary'
+  h1
+    = t('menu.users')
+
+- if users_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th = t('users.first_name')
+        th = t('users.last_name')
+        th Telegram ID
+        th Telegram Username
+        th.text-right
+    tbody
+      - users_collection.each do |user|
+        tr
+          td = user.first_name
+          td = user.last_name
+          td = user.telegram_id
+          td = user.telegram_username
+          td.text-right
+            => link_to fa_icon('pencil'), edit_user_path(user), class: 'btn btn-sm btn-primary'
+            => link_to fa_icon('trash'), user_path(user), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
+- else
+  center
+    h3.text-muted No users found.

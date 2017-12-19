@@ -1,18 +1,19 @@
 Rails.application.routes.draw do
-  root to: 'home#index'
+  root to: 'orders#index'
 
   get 'sign_in' => 'user_sessions#new'
   post 'sign_in' => 'user_sessions#create'
   delete 'sign_out' => 'user_sessions#destroy'
 
-  resources :residents
+  resources :clients
+  resources :orders do
+    get 'check' => 'orders#check'
+  end
+  resources :users
 
-  get 'messages/broadcast' => 'messages#broadcast', as: 'broadcast'
-  post 'messages/broadcast' => 'messages#send_broadcast', as: 'send_broadcast'
+
   get 'messages' => 'messages#index'
   post 'messages/send' => 'messages#send_message', as: 'send_message'
-
-  resources :transactions, only: :index
 
   telegram_webhooks TelegramController
 end

@@ -13,11 +13,17 @@ html
     .navbar.navbar-default.navbar-static-top
       .container
         .navbar-header
-          = link_to fa_icon('dashboard'), root_path, class: "navbar-brand"
-          = link_to t('menu.residents'), residents_path, class: "navbar-brand"
+          = link_to orders_path,class: 'navbar-brand' do
+            - count = Order.where(status: 'new').count
+            span
+              => t('menu.orders')
+            - if count > 0
+              sup style="color:red;font-weight:bold"
+                = Order.where(status: 'new').count
+
+          = link_to t('menu.clients'), clients_path, class: "navbar-brand"
+          = link_to t('menu.users'), users_path, class: "navbar-brand"
           = link_to t('menu.send_message'), messages_path, class: "navbar-brand"
-          = link_to t('menu.broadcast'), broadcast_path, class: "navbar-brand"
-          = link_to t('menu.transactions'), transactions_path, class: "navbar-brand"
 
           ul.nav.navbar-nav.navbar-right
             li

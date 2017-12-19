@@ -2,13 +2,35 @@ class TelegramController < Telegram::Bot::UpdatesController
   include Telegram::Bot::UpdatesController::MessageContext
 
   skip_before_action :verify_authenticity_token, :require_user
-  before_action :require_resident, only: [:days, :residents, :send_days]
   # before_action :update_telegram_username, except: :start
 
-  def require_resident
-    unless sender
-      respond_with :message, text: 'Вы не являетесь резидентом коворкинга' and return false
+  before_action do
+    case payload['text']
+    when 'Оставить заявку'
+      handle_order
+    when 'Услуги'
+      handle_services
     end
+  end
+
+  def services_list
+    {
+      'Бот' => 'bot',
+      'Сайт' => 'site',
+      'Интернет-магазин' => 'shop',
+      'Реклама' => 'adds',
+      'Дизайн' => 'design'
+    }
+    end
+
+  def handle_services
+    respond_with :message,
+      text: services_list.map{|key, value| key}.join("\n"),
+      reply_markup: {
+        keyboard: [ [text: 'Оставить заявку'], [text: 'Услуги'] ],
+        resize_keyboard: true,
+        one_time_keyboard: true
+      }
   end
 
   def update_telegram_username
@@ -17,118 +39,88 @@ class TelegramController < Telegram::Bot::UpdatesController
     end
   end
 
-  def send_days
-    save_context :send_days
-    respond_with :message, text: "Укажите telegram-логин получателя"
-  end
-
-  context_handler :send_days do |*words|
-    receiver = Resident.find_by(telegram_username: words[0])
-    response = if receiver.present?
-      if receiver != sender
-        session[:receiver] = words[0]
-        save_context :wait_for_days
-        'Укажите количество дней'
-      else
-        save_context :send_days
-        'Нельзя переводить дни самому себе'
-      end
-    else
-      save_context :send_days
-      'Получатель не найден. Просмотрите список резидентов командой /residents или введите /cancel для отмены.'
-    end
-    respond_with :message, text: response
-  end
-
-  context_handler :wait_for_days do |*words|
-    days = words[0].to_i
-    response = if days <= 0
-      save_context :wait_for_days
-      'Неверное значение'
-    elsif sender.days < days
-      save_context :wait_for_days
-      'У вас не хватает дней'
-    else
-      receiver = Resident.find_by(telegram_username: session[:receiver])
-      TransferDaysService.call(sender, receiver, days)
-      session[:receiver] = nil
-      "Перечислено #{days} дней пользователю #{receiver.decorate.display_name}"
-    end
-    respond_with :message, text: response
-  end
-
-  def cancel
-    session[:receiver] = nil
-    session[:first_name] = nil
-    session[:last_name] = nil
-    respond_with :message, text: 'OK'
-  end
-
-  def message(msg)
-    response = ["У тебя все получится, детка, ебашь!",
-                "Короче расслабься",
-                "К тебе или ко мне?",
-                "Ну шо епта",
-                "Коворкинг - это образ жизни",
-                "Просто напиши ей/ему",
-                "Держи вкурсе",
-                "Ave Maria - Deus Vult",
-                "Ой, да займись ты уже делом",
-                "продолжай",
-                "ладно, поигрались и хватит. Надоел уже!"].sample
-
-    respond_with :message, text: response
-  end
-
   def start(data = nil, *)
+    respond_with :message,
+      text: "Привет, это телеграм-бот студии Quilok. Чтобы оставить заявку, нажми кнопку ниже.",
+      reply_markup: {
+        keyboard: [ [text: 'Оставить заявку'], [text: 'Услуги'] ],
+        resize_keyboard: true,
+        one_time_keyboard: true
+      }
+  end
+
+  def handle_order
     if sender.present?
-      respond_with :message, text: "Привет, #{sender.first_name}!"
+      respond_services
     else
-      save_context :wait_for_name
-      respond_with :message, text: "Привет, друг! Пришли свои имя и фамилию чтоб я мог тебя запомнить или /cancel для отмены."
+      save_context :wait_for_contact
+      respond_with :message,
+        text: 'Отлично, пришли свой контакт чтоб я мог тебя запомнить.',
+        reply_markup: {
+          keyboard: [ [text: 'Отправить контакт', request_contact: true] ],
+          resize_keyboard: true
+        }
     end
   end
 
-  context_handler :wait_for_name do |*words|
-    session[:first_name] = words[0]
-    session[:last_name] = words[1]
+  context_handler :wait_for_contact do |*words|
+    unless payload['contact'].present?
+      save_context :wait_for_contact
+      respond_with :message, text: 'Просто пришли контакт'
+      return
+    end
 
-    save_context :wait_for_phone
-    respond_with :message, text: 'Теперь пришли номер телефона'
-  end
-
-  context_handler :wait_for_phone do |*words|
-    resident = Resident.new(
-      first_name: session[:first_name],
-      last_name: session[:last_name],
-      phone: words[0],
-      expire_at: Date.today + 1.day,
-      telegram_id: from['id'],
+    client = Client.new(
+      first_name: payload['contact']['first_name'],
+      last_name: payload['contact']['last_name'],
+      phone: payload['contact']['phone_number'],
+      telegram_id: payload['contact']['user_id'],
       telegram_username: from['username']
     )
 
-    if resident.save
-      respond_with :message, text: 'Ты успешно зарегистрировался, у тебя 1 день коворкинга'
+    if client.save
+      respond_services
     else
-      save_context :wait_for_phone
-      respond_with :message, text: "Ошибка: #{resident.errors.full_messages.first}. Попробуй еще раз."
+      save_context :wait_for_contact
+      respond_with :message,
+        text: "Ошибка: #{client.errors.full_messages.first}. Заполни контактные данные и попробуй еще раз."
     end
   end
 
-  def residents
-    response = Resident.all.decorate.reduce(""){|memo, r| memo << r.display_name_with_telegram_username << "\n"}
-    respond_with :message, text: response
+  def respond_services
+    respond_with :message,
+      text: 'Выбери услугу',
+      reply_markup: {
+        remove_keyboard: true,
+        inline_keyboard: services_list.map{ |key, value| [text: key, callback_data: value] }
+      }
   end
 
-  def days
-    response = "У вас осталось #{sender.days} дней коворкинга"
-    respond_with :message, text: response
+  def callback_query(data)
+    Order.create(
+      kind: data,
+      client_id: sender.id
+    )
+
+    User.all.each do |u|
+      Telegram.bot.send_message text: "Новая заявка от клиента #{sender.decorate.display_name} (#{sender.phone}), тема: #{services_list.key(data)}", chat_id: u.telegram_id
+    end
+
+    edit_message :text, text: "Выбрана услуга: #{services_list.key(data)}"
+
+    respond_with :message,
+      text: 'Заявка отправлена, скоро мы свяжемся с вами',
+      reply_markup: {
+        keyboard: [ [text: 'Оставить заявку'], [text: 'Услуги'] ],
+        resize_keyboard: true
+      }
   end
+
 
   protected
 
   def sender
-    @sender ||= Resident.find_by(telegram_id: from['id'])
+    @sender ||= Client.find_by(telegram_id: from['id'])
   end
 
 end

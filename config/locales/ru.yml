@@ -5,22 +5,28 @@ ru:
         blank: поле должно быть заполнено
   simple_form:
     labels:
-      resident:
+      user:
         first_name: Имя
         last_name: Фамилия
         phone: Телефон
-        days: Дни
         telegram_id: Telegram ID
         telegram_username: Telegram Username
 
-  transactions:
+  clients:
+    created_at: Дата регистрации
+    first_name: Имя
+    last_name: Фамилия
+    phone: Телефон
+    telegram_id: Telegram ID
+    telegram_username: Telegram Username
+  orders:
     from: От кого
-    to: Кому
-    days: Дни
+    phone: Телефон
+    kind: Тип
     created_at: Дата
-  residents:
-    new: Новый резидент
-    edit: Редактировать резидента
+  users:
+    new: Новый админ
+    edit: Редактировать админа
     first_name: Имя
     last_name: Фамилия
     phone: Телефон
@@ -31,9 +37,10 @@ ru:
     text: Сообщение
     receiver: Получатель
   menu:
-    residents: Резиденты
-    transactions: Транзакции
-    send_message: Отправить сообщение
+    users: Админы
+    orders: Заявки
+    clients: Клиенты
+    send_message: Сообщения
     broadcast: Рассылка
   broadcast:
     alert: Это сообщение будет отправлено всем резидентам

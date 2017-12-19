@@ -1,0 +1,29 @@
+.page-header
+  h1
+    = t('menu.orders')
+
+- if orders_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th = t('orders.from')
+        th = t('orders.phone')
+        th = t('orders.kind')
+        th = t('orders.created_at')
+        th.text-right
+    tbody
+      - orders_collection.each do |order|
+        tr style="#{'background-color:aliceblue' if order.new?}"
+          td = order.client.display_name
+          td = order.client.phone
+          td = order.display_kind
+          td = order.display_created_at
+          td.text-right
+            - if order.new?
+              => link_to fa_icon('check'), order_check_path(order), class: 'btn btn-sm btn-default'
+
+  / center
+    = paginate orders_collection
+- else
+  center
+    h3.text-muted No orders found.

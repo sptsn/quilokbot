@@ -1,0 +1,32 @@
+.page-header
+  / .pull-right
+    = link_to t('clients.new'), new_client_path, class: 'btn btn-primary'
+  h1
+    = t('menu.clients')
+
+- if clients_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th = t('clients.first_name')
+        th = t('clients.last_name')
+        th = t('clients.phone')
+        th Telegram ID
+        th Telegram Username
+        th = t('clients.created_at')
+        / th.text-right
+    tbody
+      - clients_collection.each do |client|
+        tr
+          td = client.first_name
+          td = client.last_name
+          td = client.phone
+          td = client.telegram_id
+          td = client.telegram_username
+          td = client.display_created_at
+          / td.text-right
+            => link_to fa_icon('pencil'), edit_client_path(client), class: 'btn btn-sm btn-primary'
+            => link_to fa_icon('trash'), client_path(client), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
+- else
+  center
+    h3.text-muted No clients found.

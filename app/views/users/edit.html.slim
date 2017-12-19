@@ -1,0 +1,7 @@
+.row
+  .col-md-6
+    .page-header
+      h1
+        = t('users.edit')
+
+    = render partial: 'users/shared/form', locals: { user: resource_user, url: user_path(resource_user), submit_text: t('update') }

@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
 
-  helper_method :residents_collection
+  helper_method :clients_collection
 
   def index
   end
@@ -9,8 +9,8 @@ class MessagesController < ApplicationController
   end
 
   def send_broadcast
-    res = Resident.all.map do |resident|
-      bot.send_message(text: message_params[:text], chat_id: resident.telegram_id)
+    res = Client.all.map do |client|
+      bot.send_message(text: message_params[:text], chat_id: client.telegram_id)
     end
 
     if res.all?{|r| r['ok']}
@@ -48,8 +48,8 @@ class MessagesController < ApplicationController
     params.fetch(:message, {})
   end
 
-  def residents_collection
-    @residents_collection ||= Resident.active.map{|r|[r.decorate.display_name, r.telegram_id]}
+  def clients_collection
+    @clients_collection ||= Client.all.map{|r|[r.decorate.display_name, r.telegram_id]}
   end
 
 end

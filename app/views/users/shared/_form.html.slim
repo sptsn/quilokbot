@@ -1,0 +1,8 @@
+= simple_form_for user, as: :user, url: url, html: { class: 'login__form' } do |f|
+  = f.input :first_name
+  = f.input :last_name
+  = f.input :telegram_id
+  = f.input :telegram_username
+
+  => f.button :submit, submit_text, class: 'btn btn-primary'
+  = link_to t('cancel'), users_path, class: 'btn btn-default'

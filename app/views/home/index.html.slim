@@ -1,15 +1,2 @@
 .page-header
-  h1 Админка Lavawork
-
-
-.col-md-6
-  ul.list-group
-    li.list-group-item
-      | Всего резидентов
-      span.badge = Resident.count
-    li.list-group-item
-      | Транзакций за последний месяц
-      span.badge = Transaction.for_last_month.count
-    li.list-group-item
-      | Дней переведено за последний месяц
-      span.badge = Transaction.for_last_month.reduce(0){|memo, t| memo += t.days}
+  h1 Админка Quilok

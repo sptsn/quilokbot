@@ -36,6 +36,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-toastr'
 end
 
+gem 'aasm'
 gem 'slim'
 gem 'font-awesome-rails'
 gem 'authlogic'
