@@ -15,3 +15,13 @@ User.create(
   telegram_id:           '3002462',
   telegram_username:     'aspitsyn'
 )
+
+User.create(
+  login:                 'papin',
+  password:              '766fb6432ae0418815024258010804953500b23e88bb52fdf864fc3ba1f24d91',
+  password_confirmation: '766fb6432ae0418815024258010804953500b23e88bb52fdf864fc3ba1f24d91',
+  first_name:            'Саша',
+  last_name:             'Папин',
+  telegram_id:           '47153898',
+  telegram_username:     'quilok'
+)
