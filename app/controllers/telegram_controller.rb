@@ -21,7 +21,7 @@ class TelegramController < Telegram::Bot::UpdatesController
       'Реклама' => 'adds',
       'Дизайн' => 'design'
     }
-    end
+  end
 
   def handle_services
     respond_with :message,
