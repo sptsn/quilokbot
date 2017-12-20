@@ -14,8 +14,8 @@
     tbody
       - orders_collection.each do |order|
         tr style="#{'background-color:aliceblue' if order.new?}"
-          td = order.client.display_name
-          td = order.client.phone
+          td = order.client&.display_name || '–'
+          td = order.client&.phone || '–'
           td = order.display_kind
           td = order.display_created_at
           td.text-right
