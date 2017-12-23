@@ -4,8 +4,21 @@ class TelegramController < Telegram::Bot::UpdatesController
   skip_before_action :verify_authenticity_token, :require_user
   # before_action :update_telegram_username, except: :start
 
-  before_action do
-    case payload['text']
+  # before_action do
+  #   case payload['text']
+  #   when /заявк/
+  #     handle_order
+  #   when /услуги/
+  #     handle_services
+  #   when /контакты/
+  #     handle_contacts
+  #   else
+  #     respond_with :message, text: 'Для навигации используйте меню'
+  #   end
+  # end
+
+  def message(data)
+    case data['text']
     when /заявк/
       handle_order
     when /услуги/
