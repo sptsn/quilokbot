@@ -3,11 +3,12 @@ class TelegramController < Telegram::Bot::UpdatesController
 
   skip_before_action :verify_authenticity_token, :require_user
   # before_action :update_telegram_username, except: :start
+  before_action do
+    return false if sender.present? && !sender.active?
+  end
 
   def message(data)
     case data['text']
-    when /заявк/
-      handle_order
     when /услуги/
       handle_services
     when /контакты/
@@ -27,11 +28,13 @@ class TelegramController < Telegram::Bot::UpdatesController
   end
 
   def handle_services
-    text = "<b>Мы можем:</b>\n" + services_list.except('➡️ Другой вопрос').map{|key, value| '•' + key[1..-1]}.join("\n")
-
-    respond_with :message,
-      text: text,
-      parse_mode: 'HTML'
+    Product.all.each do |product|
+      respond_with :message,
+        text: "#{product.name}\n#{product.description}",
+        reply_markup: {
+          inline_keyboard: [ [text: 'Оставить заявку', callback_data: product.id] ]
+        }
+    end
   end
 
   def start(data = nil, *)
@@ -40,18 +43,8 @@ class TelegramController < Telegram::Bot::UpdatesController
       reply_markup: default_keyboard
   end
 
-  def handle_order
-    respond_with :message,
-      text: 'Выберите услугу',
-      reply_markup: {
-        inline_keyboard: services_list.map{ |key, value| [text: key, callback_data: value] }
-      }
-  end
-
   def callback_query(data)
-    session['kind'] = data
-
-    edit_message :text, text: "Выбрана услуга: #{services_list.key(data)}"
+    session['product_id'] = data
 
     if sender.present?
       complete_order
@@ -83,7 +76,8 @@ class TelegramController < Telegram::Bot::UpdatesController
           text: "Ошибка: #{client.errors.full_messages.first}. Заполни контактные данные и попробуй еще раз."
       end
     else
-      session['name'] = words[0]
+      session['first_name'] = words[0]
+      session['last_name'] = words[1]
       save_context :wait_for_phone
       respond_with :message,
         text: 'Теперь пришлите свой номер',
@@ -95,7 +89,8 @@ class TelegramController < Telegram::Bot::UpdatesController
 
   context_handler :wait_for_phone do |*words|
     client = Client.new(
-      first_name: session[:name],
+      first_name: session[:first_name],
+      last_name: session[:last_name],
       phone: words[0],
       telegram_id: from['id'],
       telegram_username: from['username']
@@ -110,13 +105,13 @@ class TelegramController < Telegram::Bot::UpdatesController
 
   def complete_order
     Order.create(
-      kind: session['kind'],
+      product_id: session['product_id'],
       client_id: sender.id
     )
 
     User.all.each do |u|
       Telegram.bot.send_message(
-        text: "Новая заявка от клиента #{sender.decorate.display_name} (#{sender.phone}), тема: #{services_list.key(session['kind'])}",
+        text: "Новая заявка от клиента #{sender.decorate.display_name} (#{sender.phone}), тема: #{Product.find(session[:product_id]).name}",
         chat_id: u.telegram_id
       )
     end
@@ -128,21 +123,9 @@ class TelegramController < Telegram::Bot::UpdatesController
 
 protected
 
-  def services_list
-    {
-      '👾 Создать бота' => 'bot',
-      '💻 Создать сайт-визитку' => 'landing',
-      '🖥 Создать интернет-магазин' => 'shop',
-      '📈 Настроить Яндекс.Директ' => 'direct',
-      '💡 SMM-маркетинг' => 'smm',
-      '📸 Создать виртуальный тур' => 'tour',
-      '➡️ Другой вопрос' => 'other'
-    }
-  end
-
   def default_keyboard
     {
-      keyboard: [ [text: '📝 Наши услуги'], [text: '✏️ Оставить заявку'], [text: '📌 Наши контакты'] ],
+      keyboard: [ [text: '📝 Наши услуги'], [text: '📌 Наши контакты'] ],
       resize_keyboard: true
     }
   end

@@ -11,6 +11,7 @@ class Order < ActiveRecord::Base
   end
 
   belongs_to :client
+  belongs_to :product
 
   scope :ordered, -> { order(created_at: :desc) }
 

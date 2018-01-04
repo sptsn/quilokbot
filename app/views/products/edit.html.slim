@@ -1,0 +1,7 @@
+.row
+  .col-md-6
+    .page-header
+      h1
+        = t('products.edit')
+
+    = render partial: 'products/shared/form', locals: { product: resource_product, url: product_path(resource_product), submit_text: t('update') }

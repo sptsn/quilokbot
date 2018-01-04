@@ -11,7 +11,22 @@ ru:
         phone: Телефон
         telegram_id: Telegram ID
         telegram_username: Telegram Username
+      product:
+        key: Ключ
+        name: Название
+        description: Описание
+      client:
+        first_name: Имя
+        last_name: Фамилия
+        phone: Телефон
+        active: Активный?
 
+  products:
+    new: Новая услуга
+    edit: Редактирование услуги
+    key: Ключ
+    name: Название
+    description: Описание
   clients:
     created_at: Дата регистрации
     first_name: Имя
@@ -19,6 +34,7 @@ ru:
     phone: Телефон
     telegram_id: Telegram ID
     telegram_username: Telegram Username
+    active: Активный?
   orders:
     from: От кого
     phone: Телефон
@@ -41,7 +57,7 @@ ru:
     orders: Заявки
     clients: Клиенты
     send_message: Сообщения
-    broadcast: Рассылка
+    products: Услуги
   broadcast:
     alert: Это сообщение будет отправлено всем резидентам
   sign_out: Выйти

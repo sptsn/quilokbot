@@ -1,0 +1,6 @@
+= simple_form_for product, as: :product, url: url, html: { class: 'login__form' } do |f|
+  = f.input :name
+  = f.input :description, as: :text
+
+  => f.button :submit, submit_text, class: 'btn btn-primary'
+  = link_to t('cancel'), products_path, class: 'btn btn-default'

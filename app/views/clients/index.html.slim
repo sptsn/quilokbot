@@ -14,7 +14,8 @@
         th Telegram ID
         th Telegram Username
         th = t('clients.created_at')
-        / th.text-right
+        th = t('clients.active')
+        th.text-right
     tbody
       - clients_collection.each do |client|
         tr
@@ -24,7 +25,8 @@
           td = client.telegram_id
           td = client.telegram_username
           td = client.display_created_at
-          / td.text-right
+          td = client.display_active
+          td.text-right
             => link_to fa_icon('pencil'), edit_client_path(client), class: 'btn btn-sm btn-primary'
             => link_to fa_icon('trash'), client_path(client), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
 - else

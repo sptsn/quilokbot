@@ -1,0 +1,27 @@
+.page-header
+  .pull-right
+    = link_to t('products.new'), new_product_path, class: 'btn btn-primary'
+  h1
+    = t('menu.products')
+
+- if products_collection.any?
+  table.table.table-middled
+    thead
+      tr
+        th = t('products.name')
+        th = t('products.description')
+        th.text-right
+    tbody
+      - products_collection.each do |product|
+        tr
+          td = product.name
+          td = product.description.truncate(120)
+          td.text-right
+            => link_to fa_icon('pencil'), edit_product_path(product), class: 'btn btn-sm btn-primary'
+            => link_to fa_icon('trash'), product_path(product), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
+
+  / center
+    = paginate products_collection
+- else
+  center
+    h3.text-muted Услуг не найдено

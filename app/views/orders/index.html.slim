@@ -8,7 +8,7 @@
       tr
         th = t('orders.from')
         th = t('orders.phone')
-        th = t('orders.kind')
+        th Тема
         th = t('orders.created_at')
         th.text-right
     tbody
@@ -16,7 +16,7 @@
         tr style="#{'background-color:aliceblue' if order.new?}"
           td = order.client&.display_name || '–'
           td = order.client&.phone || '–'
-          td = order.display_kind
+          td = order.product&.name || '–'
           td = order.display_created_at
           td.text-right
             - if order.new?

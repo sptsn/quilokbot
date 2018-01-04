@@ -14,6 +14,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    resource_user.destroy
+    redirect_to users_path
+  end
+
   protected
 
   def users_collection

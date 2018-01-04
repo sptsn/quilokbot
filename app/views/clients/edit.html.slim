@@ -2,6 +2,6 @@
   .col-md-6
     .page-header
       h1
-        = t('residents.edit')
+        = t('clients.edit')
 
-    = render partial: 'residents/shared/form', locals: { resident: resource_resident, url: resident_path(resource_resident), submit_text: t('update') }
+    = render partial: 'clients/shared/form', locals: { client: resource_client, url: client_path(resource_client), submit_text: t('update') }
