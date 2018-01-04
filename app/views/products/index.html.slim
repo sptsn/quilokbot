@@ -15,7 +15,7 @@
       - products_collection.each do |product|
         tr
           td = product.name
-          td = product.description.truncate(120)
+          td = product.description.truncate(100)
           td.text-right
             => link_to fa_icon('pencil'), edit_product_path(product), class: 'btn btn-sm btn-primary'
             => link_to fa_icon('trash'), product_path(product), method: 'delete', data: { confirm: 'Are you sure?'}, class: 'btn btn-danger btn-sm'
