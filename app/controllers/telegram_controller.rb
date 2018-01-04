@@ -30,7 +30,7 @@ class TelegramController < Telegram::Bot::UpdatesController
   end
 
   def handle_services
-    Product.all.each do |product|
+    Product.order(:id).each do |product|
       respond_with :message,
         text: "#{product.name}\n#{product.description}",
         reply_markup: {
