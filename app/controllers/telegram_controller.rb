@@ -4,7 +4,9 @@ class TelegramController < Telegram::Bot::UpdatesController
   skip_before_action :verify_authenticity_token, :require_user
   # before_action :update_telegram_username, except: :start
   before_action do
-    return false if sender.present? && !sender.active?
+    if sender.present? && !sender.active?
+      false
+    end
   end
 
   def message(data)
