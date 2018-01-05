@@ -127,7 +127,7 @@ protected
 
   def default_keyboard
     {
-      keyboard: [ [{text: '📝 Наши услуги'}, {text: '📌 Наши контакты'}] ],
+      keyboard: [ [{text: '📝 Услуги'}, {text: '📌 Контакты'}] ],
       resize_keyboard: true
     }
   end
