@@ -11,9 +11,9 @@ class TelegramController < Telegram::Bot::UpdatesController
 
   def message(data)
     case data['text']
-    when /услуги/
+    when /Услуги/
       handle_services
-    when /контакты/
+    when /Контакты/
       handle_contacts
     else
       respond_with :message, text: 'Для навигации используйте меню'
