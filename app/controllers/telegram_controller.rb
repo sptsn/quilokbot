@@ -6,6 +6,11 @@ class TelegramController < Telegram::Bot::UpdatesController
   before_action do
     if sender.present? && !sender.active?
       false
+    else
+      Message.create(
+        from: from.except('language_code').to_s,
+        text: payload['text']
+      )
     end
   end
 
@@ -32,10 +37,11 @@ class TelegramController < Telegram::Bot::UpdatesController
   def handle_services
     Product.order(:id).each do |product|
       respond_with :message,
-        text: "#{product.name}\n#{product.description}",
+        text: "#{product.name.html_safe}\n#{product.description}",
         reply_markup: {
           inline_keyboard: [ [text: 'Оставить заявку', callback_data: product.id] ]
-        }
+        },
+        parse_mode: 'HTML'
     end
   end
 

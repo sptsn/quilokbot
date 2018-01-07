@@ -14,7 +14,7 @@
     tbody
       - products_collection.each do |product|
         tr
-          td = product.name
+          td = product.name.html_safe
           td = product.description.truncate(100)
           td.text-right
             => link_to fa_icon('pencil'), edit_product_path(product), class: 'btn btn-sm btn-primary'

@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
 
-  helper_method :clients_collection
+  helper_method :clients_collection, :messages_collection
 
   def index
   end
@@ -8,19 +8,19 @@ class MessagesController < ApplicationController
   def broadcast
   end
 
-  def send_broadcast
-    res = Client.all.map do |client|
-      bot.send_message(text: message_params[:text], chat_id: client.telegram_id)
-    end
-
-    if res.all?{|r| r['ok']}
-      flash[:success] = 'Messages sent'
-    else
-      flash[:error] = 'Something goes wrong'
-    end
-
-    redirect_to broadcast_path
-  end
+  # def send_broadcast
+  #   res = Client.all.map do |client|
+  #     bot.send_message(text: message_params[:text], chat_id: client.telegram_id)
+  #   end
+  #
+  #   if res.all?{|r| r['ok']}
+  #     flash[:success] = 'Messages sent'
+  #   else
+  #     flash[:error] = 'Something goes wrong'
+  #   end
+  #
+  #   redirect_to broadcast_path
+  # end
 
   def send_message
     res = bot.send_message(text: message_params[:text], chat_id: message_params[:chat_id])
@@ -35,6 +35,10 @@ class MessagesController < ApplicationController
   end
 
   protected
+
+  def messages_collection
+    @messages_collection ||= Message.ordered
+  end
 
   def bot
     @bot ||= Telegram.bot
