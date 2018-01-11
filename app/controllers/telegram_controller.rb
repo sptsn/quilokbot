@@ -8,7 +8,7 @@ class TelegramController < Telegram::Bot::UpdatesController
       false
     else
       Message.create(
-        from: from.except('language_code').to_s,
+        from: "#{from['first_name']} #{from['last_name']} (#{from['username']} #{from['id']})",
         text: payload['text']
       )
     end
